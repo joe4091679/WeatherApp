@@ -4,11 +4,14 @@
 	<h1 id="location"><%= city.toUpperCase() + ", " + country %></h1>
 	<!-- bootstrap grid system -->
 	<div class="row">
+		<!-- first column is for google map -->
 		<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
 			<div id="map"></div>
 		</div>
-		
+
+		<!-- second column is for temperature and weather icon -->
 		<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
+			<!-- temperature -->
 			<div class="row-lg-6">
 				<!-- the color of the panel is determined by the temperature -->
 				<% if (temp > 30) { -%>
@@ -17,7 +20,7 @@
 					<div class="panel panel-warning">
 				<% } else{ -%>
 					<div class="panel panel-info">
-				<% } %>	
+				<% } %>
 					<div class="panel-heading">
 						<h2>Temperature<h2>
 					</div>
@@ -26,6 +29,7 @@
 					</div>
 				</div>
 			</div>
+			<!-- icon -->
 			<div class="row-lg-6">
 				<div class="panel panel-primary">
 					<div class="panel-heading">
@@ -44,6 +48,7 @@
 			</div>
 		</div>
 
+		<!-- third column is for sunrise and sunset time -->
 		<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
 			<div class="row-lg-6">
 				<div class="panel panel-success">
@@ -52,7 +57,7 @@
 					</div>
 					<div class="panel-body">
 						<h1 class="text-center">
-							<%= sunriseTime.hours %> : <%= sunriseTime.minutes %> : <%= sunriseTime.seconds %>		
+							<%= sunriseTime.hours %> : <%= sunriseTime.minutes %> : <%= sunriseTime.seconds %>
 						</h1>
 					</div>
 				</div>
@@ -73,10 +78,12 @@
 
 <!-- the number of photos determines the mode of the background -->
 <% if (url.length < 5) { %>
+	<!-- only show one image -->
 	<ul class="locationImage">
 		<li style="background-image: url(<%= url %>)"></li>
 	</ul>
 <% } else { %>
+	<!-- slideshow of 5 images -->
 	<ul class="slideshow">
 		<% for (var i = 0; i < 5; i++) { %>
 			<li style="background-image: url(<%= url[i] %>)"></li>
@@ -93,10 +100,7 @@
     	    center: center,
     	    scrollwheel: false
     	});
-    	var contentString = `
-      	<strong><%= country %><br />
-      	<%= city %></strong>
-    	`
+    	var contentString = `<strong><%= country %><br /><%= city %></strong>`
     	var infowindow = new google.maps.InfoWindow({
       		content: contentString
     	});
@@ -105,7 +109,7 @@
         	map: map
     	});
     	marker.addListener('click', function() {
-      	infowindow.open(map, marker);
+	      	infowindow.open(map, marker);
    		});
   	}
 </script>

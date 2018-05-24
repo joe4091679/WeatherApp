@@ -4,14 +4,14 @@ var express = require("express"),
 	bodyParser = require("body-parser"),
 	flash = require("connect-flash");
 var NodeGeocoder = require('node-geocoder');
- 
+
 var options = {
   provider: 'google',
   httpAdapter: 'https',
   apiKey: 'AIzaSyA7szZpDHv4AZyn-tqsQoKyo3SqXVMYMog',
   formatter: null
 };
- 
+
 var geocoder = NodeGeocoder(options);
 
 
@@ -69,7 +69,7 @@ app.post("/city", function(req, res){
 					reference.push(jsonData.result.photos[i].photo_reference);
 					res.locals.url.push("https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=" + reference[i] + "&key=AIzaSyAX7dHS29RfhsLsaIwz3QFyhXrKeDXqbtA");
 				}
-				
+
 				// get weather information
 				request("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&appid=fad2c02707d9526deef6c69ef62d538e", function(error, response, body){
 					if (!error && response.statusCode == 200) {
