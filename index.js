@@ -60,6 +60,7 @@ app.post("/city", function(req, res){
 			if (!error && response.statusCode == 200) {
 				// parse the jsonData to get the required place reference
 				var jsonData = JSON.parse(body);
+				console.log(jsonData);
 				var country = jsonData.result.address_components.slice(-1)[0].short_name;
 				var photoNum = jsonData.result.photos.length;
 				var reference = [];
