@@ -1,0 +1,205 @@
+body{
+	/* let the background animation start from black screen */
+	background-color: #000;
+}
+
+h1#temp{
+	font-size: 5em;
+	text-align: center;
+}
+h1#greet,h1#location {
+	color: #fff;
+	font-size: 5em;
+	text-align: center;
+	text-shadow: 0px 4px 8px rgba(0, 0, 0, .4),
+				 0px 8px 16px rgba(0, 0, 0, .1),
+				 0px 16px 24px rgba(0, 0, 0, .1);
+}
+
+nav {
+	z-index: 1;
+	position: relative;
+}
+
+.alert {
+	z-index: 1;
+	position: relative;
+	opacity: 0;
+	animation: fadeout 10s linear;
+}
+
+.input-group {
+	width: 40vw;
+	margin: 0 auto;
+}
+.navbar {
+	margin: 0;
+}
+
+.navbar-brand {
+	font-weight: 800;
+	font-size: 2em;
+}
+
+.panel-primary, .panel-info, .panel-warning, .panel-danger, .panel-success {
+	opacity: .9;
+}
+
+.panel-primary:hover, .panel-info:hover, .panel-warning:hover, .panel-danger:hover, .panel-success:hover {
+	opacity: 1;
+	transition: opacity .5s;
+	-webkit-transition: opacity .5s;
+}
+
+.weatherIcon {
+	width: 50%;
+	height: 50%;
+}
+
+#welcome, #content {
+	z-index: 1;
+	position: relative;
+}
+
+#welcome {
+	margin-top: 40vh;
+}
+
+/* Google Maps */
+#map {
+    height: 75vh;
+    width: 100%;
+}
+
+
+/* for slideshow and location image */
+.slideshow, .locationImage {
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	position: fixed;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	z-index: 0;
+}
+
+.slideshow li, .locationImage li {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center;
+	/* give some blur effect of background */
+	-webkit-filter: blur(2px);
+  	-moz-filter: blur(2px);
+  	-o-filter: blur(2px);
+  	-ms-filter: blur(2px);
+  	filter: blur(2px);
+	opacity: 0;
+	z-index: 0;
+}
+
+.slideshow li {
+	/* endless slideshow of 5 photos */
+	animation: slideshowAnimation 50s linear infinite;
+}
+
+.locationImage li {
+	opacity: 1;
+	animation: backgroundAnimation 2s linear;
+}
+
+/* preset 5 photos for landing page */
+.slideshow li:nth-child(1){
+	background-image: url(https://images.unsplash.com/photo-1421081177127-339f586c9b49?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=380980f0fdd19c7d4cd5a34384a8cff0&auto=format&fit=crop&w=800&q=60);
+}
+
+.slideshow li:nth-child(2){
+	background-image: url(https://images.unsplash.com/photo-1513237739339-5696060a5359?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=2d0271162ef8e34c6b2f43a7bb5b3883&auto=format&fit=crop&w=800&q=60);
+	animation-delay: 10s;
+}
+
+.slideshow li:nth-child(3){
+	background-image: url(https://images.unsplash.com/photo-1469365556835-3da3db4c253b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=cc8ffae7375ecf2fed3293278e1a9a2b&auto=format&fit=crop&w=800&q=60);
+	animation-delay: 20s;
+}
+
+.slideshow li:nth-child(4){
+	background-image: url(https://images.unsplash.com/photo-1484603738253-e5b73679e8cb?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=3d626d1bc5fda2b5ccc0c72a89d9c120&auto=format&fit=crop&w=800&q=60);
+	animation-delay: 30s;
+}
+
+.slideshow li:nth-child(5){
+	background-image: url(https://images.unsplash.com/photo-1474302694023-9711af8045cf?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=d43117b6aeaa821e8dc1c983eb17e85d&auto=format&fit=crop&w=800&q=60);
+	animation-delay: 40s;
+}
+
+/*
+slideanimation cycle diagram:
+
+0s        10s       20s       30s       40s       50s
+-------------------------------------------------- 
+
+#####$$$$$*****
+          #####$$$$$*****
+                    #####$$$$$*****
+                              #####$$$$$*****
+                                        #####$$$$$
+*****                        
+
+-------------------------------------------------- 
+0%   10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
+
+#####: fade-in slowly at the beginning
+$$$$$: fade-in slowly at the ending
+*****: face-out
+*/
+
+@keyframes slideshowAnimation {
+	0% {
+		opacity: 0;
+		animation-timing-function: ease-in;
+	};
+	10% {
+		opacity: 1;
+		animation-timing-function: ease-out;
+	}
+	20% {
+		opacity: 1;
+	}
+	30% {
+		opacity: 0;
+	}
+}
+
+@keyframes backgroundAnimation {
+	0% {
+		opacity: 0;
+		animation-timing-function: ease-in;
+	}
+
+	100% {
+		opacity: 1;
+		animation-timing-function: ease-out;
+	}
+}
+
+@keyframes fadeout {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}
+
+
+/* if the browser didn't support animation, just leave the background with opacity 1 */
+.no-cssanimations .slideshow li {
+	opacity: 1;
+}
