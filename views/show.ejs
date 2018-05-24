@@ -4,12 +4,7 @@
 	<h1 id="location"><%= city.toUpperCase() + ", " + country %></h1>
 	<!-- bootstrap grid system -->
 	<div class="row">
-		<!-- first column is for google map -->
-		<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
-			<div id="map"></div>
-		</div>
-
-		<!-- second column is for temperature and weather icon -->
+		<!-- first column is for temperature and weather icon -->
 		<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
 			<!-- temperature -->
 			<div class="row-lg-6">
@@ -48,7 +43,7 @@
 			</div>
 		</div>
 
-		<!-- third column is for sunrise and sunset time -->
+		<!-- second column is for sunrise and sunset time -->
 		<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
 			<div class="row-lg-6">
 				<div class="panel panel-success">
@@ -73,23 +68,30 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- third column is for google map -->
+		<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
+			<div id="map"></div>
+		</div>
 	</div>
 </div>
 
-<!-- the number of photos determines the mode of the background -->
-<% if (url.length < 5) { %>
-	<!-- only show one image -->
-	<ul class="locationImage">
-		<li style="background-image: url(<%= url %>)"></li>
-	</ul>
-<% } else { %>
-	<!-- slideshow of 5 images -->
-	<ul class="slideshow">
-		<% for (var i = 0; i < 5; i++) { %>
-			<li style="background-image: url(<%= url[i] %>)"></li>
+<div class="container">
+		<!-- the number of photos determines the mode of the background -->
+		<% if (url.length < 5 && url.length > 0) { %>
+			<!-- only show one image -->
+			<ul class="locationImage">
+				<li style="background-image: url(<%= url %>)"></li>
+			</ul>
+		<% } else { %>
+			<!-- slideshow of 5 images -->
+			<ul class="slideshow">
+					<% for (var i = 0; i < 5; i++) { %>
+						<li style="background-image: url(<%= url[i] %>)"></li>
+					<% } %>
+			</ul>
 		<% } %>
-	</ul>
-<% } %>
+</div>
 
 <!-- Google map -->
 <script>

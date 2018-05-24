@@ -16,6 +16,10 @@ h1#greet,h1#location {
 				 0px 16px 24px rgba(0, 0, 0, .1);
 }
 
+h1#location {
+	margin: 36% auto;
+}
+
 nav {
 	z-index: 1;
 	position: relative;
@@ -51,11 +55,18 @@ nav {
 	-webkit-transition: opacity .5s;
 }
 
+.row {
+	margin-bottom: 10%;
+}
+
 .weatherIcon {
 	width: 50%;
 	height: 50%;
 }
 
+.navbar-fixed-top {
+	top: 0;
+}
 #welcome, #content {
 	z-index: 1;
 	position: relative;
@@ -67,8 +78,8 @@ nav {
 
 /* Google Maps */
 #map {
-    height: 75vh;
-    width: 100%;
+	width: 100%;
+  height: 400px;
 }
 
 
@@ -143,16 +154,16 @@ nav {
 slideanimation cycle diagram:
 
 0s        10s       20s       30s       40s       50s
--------------------------------------------------- 
+--------------------------------------------------
 
 #####$$$$$*****
           #####$$$$$*****
                     #####$$$$$*****
                               #####$$$$$*****
                                         #####$$$$$
-*****                        
+*****
 
--------------------------------------------------- 
+--------------------------------------------------
 0%   10%  20%  30%  40%  50%  60%  70%  80%  90%  100%
 
 #####: fade-in slowly at the beginning

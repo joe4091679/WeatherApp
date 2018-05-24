@@ -12,7 +12,7 @@
 <body>
 	<% if (!isInLanding) { %>
 	<!-- navigation bar -->
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-default navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="/"><i class="fas fa-cloud"></i>WeatherApp</a>
@@ -32,4 +32,3 @@
 	<% if (error && error.length > 0) { %>
 		<div class="alert alert-danger"><%= error %></div>
 	<% } %>
-	

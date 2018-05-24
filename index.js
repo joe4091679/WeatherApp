@@ -60,15 +60,16 @@ app.post("/city", function(req, res){
 			if (!error && response.statusCode == 200) {
 				// parse the jsonData to get the required place reference
 				var jsonData = JSON.parse(body);
-				console.log(jsonData);
 				var country = jsonData.result.address_components.slice(-1)[0].short_name;
-				var photoNum = jsonData.result.photos.length;
-				var reference = [];
+				if (typeof jsonData.result.photos !== 'undefined') {
+						var photoNum = jsonData.result.photos.length;
+						var reference = [];
 
-				// get all the background images url
-				for (var i = 0; i < photoNum; i++) {
-					reference.push(jsonData.result.photos[i].photo_reference);
-					res.locals.url.push("https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=" + reference[i] + "&key=AIzaSyAX7dHS29RfhsLsaIwz3QFyhXrKeDXqbtA");
+						// get all the background images url
+						for (var i = 0; i < photoNum; i++) {
+							reference.push(jsonData.result.photos[i].photo_reference);
+							res.locals.url.push("https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=" + reference[i] + "&key=AIzaSyAX7dHS29RfhsLsaIwz3QFyhXrKeDXqbtA");
+						}
 				}
 
 				// get weather information
@@ -113,7 +114,7 @@ app.post("/city", function(req, res){
 	});
 });
 
-app.listen(process.env.PORT, process.env.IP, function(){
+app.listen("3000", function(){
 	console.log("SERVER HAS STARTED!!!");
 });
 
