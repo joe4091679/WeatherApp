@@ -11,24 +11,25 @@
 </head>
 <body>
 	<% if (!isInLanding) { %>
-	<!-- navigation bar -->
-	<nav class="navbar navbar-default navbar-fixed-top">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="/"><i class="fas fa-cloud"></i>WeatherApp</a>
+		<!-- navigation bar -->
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/"><i class="fas fa-cloud"></i>WeatherApp</a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<form action="/" method="POST" class="navbar-form navbar-right" role="search">
+					  	<div class="form-group">
+					    	<input type="text" class="form-control" placeholder="Search" name="city">
+					  	</div>
+					  	<button type="submit" class="btn btn-primary">Search</button>
+					</form>
+				</div>
 			</div>
-			<div class="collapse navbar-collapse">
-				<form action="/city" method="POST" class="navbar-form navbar-right" role="search">
-				  	<div class="form-group">
-				    	<input type="text" class="form-control" placeholder="Search" name="city">
-				  	</div>
-				  	<button type="submit" class="btn btn-primary">Search</button>
-				</form>
-			</div>
-		</div>
-	</nav>
-	<% } %>
-	<!-- if there is an error message, show the alert -->
-	<% if (error && error.length > 0) { %>
+		</nav>
+		<% if (error && error.length > 0) { %>
+			<div class="alert alert-danger" style="top: 50px;"><%= error %></div>
+		<% } %>
+	<% } else if (error && error.length > 0) { %>
 		<div class="alert alert-danger"><%= error %></div>
 	<% } %>

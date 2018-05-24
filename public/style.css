@@ -28,8 +28,6 @@ nav {
 .alert {
 	z-index: 1;
 	position: relative;
-	opacity: 0;
-	animation: fadeout 10s linear;
 }
 
 .input-group {
@@ -64,9 +62,6 @@ nav {
 	height: 50%;
 }
 
-.navbar-fixed-top {
-	top: 0;
-}
 #welcome, #content {
 	z-index: 1;
 	position: relative;
@@ -198,15 +193,6 @@ $$$$$: fade-in slowly at the ending
 	100% {
 		opacity: 1;
 		animation-timing-function: ease-out;
-	}
-}
-
-@keyframes fadeout {
-	0% {
-		opacity: 1;
-	}
-	100% {
-		opacity: 0;
 	}
 }
 

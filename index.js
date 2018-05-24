@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
   	res.locals.url = [];
   	res.locals.isInLanding = false;
   	res.locals.error = req.flash("error");
-  	next()
+  	next();
 })
 //======================================================================
 //							INDEX ROUTE
@@ -41,35 +41,40 @@ app.get("/", function(req, res){
 	res.render("landing");
 });
 
+app.post("/", function(req, res){
+	var city = req.body.city;
+	res.redirect("/"+city);
+});
+
 //======================================================================
 //							SHOW ROUTE
 //======================================================================
-app.post("/city", function(req, res){
-	var city = req.body.city;
+app.get("/:city", function(req, res){
+	var city = req.params.city;
 	geocoder.geocode(city, function (err, data) {
-	    if (err || !data.length) {
-	      	req.flash('error', 'Invalid address');
-	      	return res.redirect('back');
-	    }
-	    var lat = data[0].latitude;
-	    var lng = data[0].longitude;
-	    var location = data[0].formattedAddress;
-	    var placeId = data[0].extra.googlePlaceId;
-	    // get photos of locations
+		if (err || !data.length) {
+			req.flash('error', 'Invalid address');
+			return res.redirect('back');
+		}
+		var lat = data[0].latitude;
+		var lng = data[0].longitude;
+		var location = data[0].formattedAddress;
+		var placeId = data[0].extra.googlePlaceId;
+		// get photos of locations
 		request("https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeId + "&key=AIzaSyAX7dHS29RfhsLsaIwz3QFyhXrKeDXqbtA", function(error, response, body){
 			if (!error && response.statusCode == 200) {
 				// parse the jsonData to get the required place reference
 				var jsonData = JSON.parse(body);
 				var country = jsonData.result.address_components.slice(-1)[0].short_name;
 				if (typeof jsonData.result.photos !== 'undefined') {
-						var photoNum = jsonData.result.photos.length;
-						var reference = [];
+					var photoNum = jsonData.result.photos.length;
+					var reference = [];
 
-						// get all the background images url
-						for (var i = 0; i < photoNum; i++) {
-							reference.push(jsonData.result.photos[i].photo_reference);
-							res.locals.url.push("https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=" + reference[i] + "&key=AIzaSyAX7dHS29RfhsLsaIwz3QFyhXrKeDXqbtA");
-						}
+					// get all the background images url
+					for (var i = 0; i < photoNum; i++) {
+						reference.push(jsonData.result.photos[i].photo_reference);
+						res.locals.url.push("https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=" + reference[i] + "&key=AIzaSyAX7dHS29RfhsLsaIwz3QFyhXrKeDXqbtA");
+					}
 				}
 
 				// get weather information
@@ -114,8 +119,10 @@ app.post("/city", function(req, res){
 	});
 });
 
-app.listen(process.env.PORT, process.env.IP, function(){
-// app.listen("3000", function(){
+
+
+// app.listen(process.env.PORT, process.env.IP, function(){
+app.listen("3000", function(){
 	console.log("SERVER HAS STARTED!!!");
 });
 
