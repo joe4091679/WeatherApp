@@ -18,6 +18,10 @@
 				<% } %>
 					<div class="panel-heading">
 						<h2>Temperature<h2>
+						<label class="switch">
+							<input type="checkbox" checked>
+							<span class="slider round"></span>
+						</label>
 					</div>
 					<div class="panel-body">
 						<h1 id="temp"><%= temp %> °C</h1>
@@ -116,4 +120,5 @@
   	}
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCbJMuanL-wHgTe6kprTMxrmUTvbBZKnjQ&callback=initMap"></script>
+<script type="text/javascript" src="/asset/js/show.js"></script>
 <% include partials/footer %>
