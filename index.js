@@ -57,6 +57,7 @@ app.get("/:city", function(req, res){
 	geocoder.geocode(city, function (err, data) {
 		if (err || !data.length) {
 			req.flash('error', 'Invalid address');
+			console.log(err);
 			return res.redirect('back');
 		}
 		var lat = data[0].latitude;
