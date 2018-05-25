@@ -2,13 +2,16 @@ var express = require("express"),
 	app = express(),
 	request = require("request"),
 	bodyParser = require("body-parser"),
-	flash = require("connect-flash");
+	flash = require("connect-flash"),
+	geocoder_key = process.env.GEOCODER_KEY,
+	photo_key = process.env.PHOTO_KEY,
+	weather_key = process.env.WEATHER_KEY;
 var NodeGeocoder = require('node-geocoder');
 
 var options = {
   provider: 'google',
   httpAdapter: 'https',
-  apiKey: 'AIzaSyA7szZpDHv4AZyn-tqsQoKyo3SqXVMYMog',
+  apiKey: 'AIzaSyC1AvaexyXR7jQZmzJG0njb7OuJn9AAS-I',
   formatter: null
 };
 
@@ -61,7 +64,7 @@ app.get("/:city", function(req, res){
 		var location = data[0].formattedAddress;
 		var placeId = data[0].extra.googlePlaceId;
 		// get photos of locations
-		request("https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeId + "&key=AIzaSyAX7dHS29RfhsLsaIwz3QFyhXrKeDXqbtA", function(error, response, body){
+		request("https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeId + "&key=" + photo_key, function(error, response, body){
 			if (!error && response.statusCode == 200) {
 				// parse the jsonData to get the required place reference
 				var jsonData = JSON.parse(body);
@@ -73,12 +76,12 @@ app.get("/:city", function(req, res){
 					// get all the background images url
 					for (var i = 0; i < photoNum; i++) {
 						reference.push(jsonData.result.photos[i].photo_reference);
-						res.locals.url.push("https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=" + reference[i] + "&key=AIzaSyAX7dHS29RfhsLsaIwz3QFyhXrKeDXqbtA");
+						res.locals.url.push("https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=" + reference[i] + "&key=" + photo_key);
 					}
 				}
 
 				// get weather information
-				request("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&appid=fad2c02707d9526deef6c69ef62d538e", function(error, response, body){
+				request("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&appid=" + weather_key, function(error, response, body){
 					if (!error && response.statusCode == 200) {
 						// parse the jsonData to get the required weather information
 						var jsonData = JSON.parse(body);
