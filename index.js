@@ -20,7 +20,6 @@ var geocoder = NodeGeocoder(options);
 //======================================================================
 console.log("CHECK LIST:")
 console.log("	GEOCODER_KEY: " + google_key);
-// console.log("	PHOTO_KEY: " + photo_key);
 console.log("	WEATHER_KEY: " + weather_key);
 //======================================================================
 //						APP CONFIGURATION
@@ -61,7 +60,6 @@ app.get("/:city", function(req, res){
 	geocoder.geocode(city, function (err, data) {
 		if (err || !data.length) {
 			req.flash('error', 'Invalid address');
-			console.log(err);
 			return res.redirect('back');
 		}
 		var lat = data[0].latitude;
@@ -70,56 +68,59 @@ app.get("/:city", function(req, res){
 		var placeId = data[0].extra.googlePlaceId;
 		// get photos of locations
 		request("https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeId + "&key=" + google_key, function(error, response, body){
-			if (!error && response.statusCode == 200 && body.error_message !== 'OK') {
+			if (!error && response.statusCode == 200) {
 				// parse the jsonData to get the required place reference
 				var jsonData = JSON.parse(body);
 				console.log(jsonData);
-				var country = jsonData.result.address_components.slice(-1)[0].short_name;
-				if (typeof jsonData.result.photos !== 'undefined') {
-					var photoNum = jsonData.result.photos.length;
-					var reference = [];
+				if (jsonData.status === 'OK') {
+					var country = jsonData.result.address_components.slice(-1)[0].short_name;
+					if (typeof jsonData.result.photos !== 'undefined') {
+						var photoNum = jsonData.result.photos.length;
+						var reference = [];
 
-					// get all the background images url
-					for (var i = 0; i < photoNum; i++) {
-						reference.push(jsonData.result.photos[i].photo_reference);
-						res.locals.url.push("https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=" + reference[i] + "&key=" + google_key);
+						// get all the background images url
+						for (var i = 0; i < photoNum; i++) {
+							reference.push(jsonData.result.photos[i].photo_reference);
+							res.locals.url.push("https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=" + reference[i] + "&key=" + google_key);
+						}
 					}
-				}
-
-				// get weather information
-				request("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&appid=" + weather_key, function(error, response, body){
-					if (!error && response.statusCode == 200 && body.error_message !== 'OK') {
-						// parse the jsonData to get the required weather information
-						var jsonData = JSON.parse(body);
-						var temp = k2c(jsonData.main.temp);
-						var weather = jsonData.weather[0];
-						var sunrise = new Date(jsonData.sys.sunrise*1000);
-						var sunset = new Date(jsonData.sys.sunset*1000);
-						var sunriseTime = {
-							hours: preZero(sunrise.getHours()),
-							minutes: preZero(sunrise.getMinutes()),
-							seconds: preZero(sunrise.getSeconds())
-						}
-						var sunsetTime = {
-							hours: preZero(sunset.getHours()),
-							minutes: preZero(sunset.getMinutes()),
-							seconds: preZero(sunset.getSeconds())
-						}
-						res.render("show", {
-							country: country,
-							city: city,
-							lat: lat,
-							lng: lng,
-							temp: temp,
-							weather: weather,
-							sunriseTime: sunriseTime,
-							sunsetTime: sunsetTime
-						});
-					} else {
-						req.flash("error", body.error_message);
-						res.redirect("/");
-					} // get weather information
-				});
+					// get weather information
+					request("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&appid=" + weather_key, function(error, response, body){
+						if (!error && response.statusCode == 200) {
+							// parse the jsonData to get the required weather information
+							var jsonData = JSON.parse(body);
+							var temp = k2c(jsonData.main.temp);
+							var weather = jsonData.weather[0];
+							var sunrise = new Date(jsonData.sys.sunrise*1000);
+							var sunset = new Date(jsonData.sys.sunset*1000);
+							var sunriseTime = {
+								hours: preZero(sunrise.getHours()),
+								minutes: preZero(sunrise.getMinutes()),
+								seconds: preZero(sunrise.getSeconds())
+							}
+							var sunsetTime = {
+								hours: preZero(sunset.getHours()),
+								minutes: preZero(sunset.getMinutes()),
+								seconds: preZero(sunset.getSeconds())
+							}
+							res.render("show", {
+								country: country,
+								city: city,
+								lat: lat,
+								lng: lng,
+								temp: temp,
+								weather: weather,
+								sunriseTime: sunriseTime,
+								sunsetTime: sunsetTime
+							});
+						} else {
+							req.flash("error", body.error_message);
+							res.redirect("/");
+						} // get weather information
+					});
+				} else {
+					req.flash("error", jsonData.status);
+				} // status is not 'OK'
 			} else {
 				req.flash("error", body.error_message);
 				res.redirect("/");
