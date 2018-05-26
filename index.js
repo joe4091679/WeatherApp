@@ -3,21 +3,25 @@ var express = require("express"),
 	request = require("request"),
 	bodyParser = require("body-parser"),
 	flash = require("connect-flash"),
-	geocoder_key = process.env.GEOCODER_KEY,
-	photo_key = process.env.PHOTO_KEY,
+	google_key = process.env.GEOCODER_KEY,
 	weather_key = process.env.WEATHER_KEY;
 var NodeGeocoder = require('node-geocoder');
 
 var options = {
   provider: 'google',
   httpAdapter: 'https',
-  apiKey: geocoder_key,
+  apiKey: google_key,
   formatter: null
 };
 
 var geocoder = NodeGeocoder(options);
-
-
+//======================================================================
+//						CHECK LIST
+//======================================================================
+console.log("CHECK LIST:")
+console.log("	GEOCODER_KEY: " + google_key);
+// console.log("	PHOTO_KEY: " + photo_key);
+console.log("	WEATHER_KEY: " + weather_key);
 //======================================================================
 //						APP CONFIGURATION
 //======================================================================
@@ -65,10 +69,11 @@ app.get("/:city", function(req, res){
 		var location = data[0].formattedAddress;
 		var placeId = data[0].extra.googlePlaceId;
 		// get photos of locations
-		request("https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeId + "&key=" + photo_key, function(error, response, body){
-			if (!error && response.statusCode == 200) {
+		request("https://maps.googleapis.com/maps/api/place/details/json?placeid=" + placeId + "&key=" + google_key, function(error, response, body){
+			if (!error && response.statusCode == 200 && body.error_message !== 'OK') {
 				// parse the jsonData to get the required place reference
 				var jsonData = JSON.parse(body);
+				console.log(jsonData);
 				var country = jsonData.result.address_components.slice(-1)[0].short_name;
 				if (typeof jsonData.result.photos !== 'undefined') {
 					var photoNum = jsonData.result.photos.length;
@@ -77,13 +82,13 @@ app.get("/:city", function(req, res){
 					// get all the background images url
 					for (var i = 0; i < photoNum; i++) {
 						reference.push(jsonData.result.photos[i].photo_reference);
-						res.locals.url.push("https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=" + reference[i] + "&key=" + photo_key);
+						res.locals.url.push("https://maps.googleapis.com/maps/api/place/photo?maxwidth=2000&photoreference=" + reference[i] + "&key=" + google_key);
 					}
 				}
 
 				// get weather information
 				request("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lng + "&appid=" + weather_key, function(error, response, body){
-					if (!error && response.statusCode == 200) {
+					if (!error && response.statusCode == 200 && body.error_message !== 'OK') {
 						// parse the jsonData to get the required weather information
 						var jsonData = JSON.parse(body);
 						var temp = k2c(jsonData.main.temp);
@@ -111,12 +116,12 @@ app.get("/:city", function(req, res){
 							sunsetTime: sunsetTime
 						});
 					} else {
-						req.flash("error", "SOMETHING WENT WRONG WHILE GETTING WEATHER INFORMATION");
+						req.flash("error", body.error_message);
 						res.redirect("/");
 					} // get weather information
 				});
 			} else {
-				req.flash("error", "SOMETHING WENT WRONG WHILE GETTING PHOTOS");
+				req.flash("error", body.error_message);
 				res.redirect("/");
 			} // get place reference
 		});
