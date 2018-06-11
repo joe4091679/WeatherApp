@@ -15,7 +15,10 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
+    "getmac": "^1.4.1",
+    "google-geolocation": "^1.0.2",
     "jquery": "^3.3.1",
+    "locus": "^2.0.1",
     "node-geocoder": "^3.22.0",
     "request": "^2.86.0"
   }

@@ -1,8 +1,8 @@
 <% include partials/header %>
 
 <div class="container" id="welcome">
-	<h1 id="greet">Welcome to WeatherAPP</h1>
-	<form action="/" method="POST" role="search">
+	<h1 id="greet">Welcome to WeatherAPP <a href="/myLocation"><i class="fas fa-location-arrow"></i></a></h1>
+	<form action="/city" method="GET" role="search">
 	  	<div class="input-group input-group-lg">
 	    	<input type="text" class="form-control" placeholder="Search for city name..." name="city">
 	    	<span class="input-group-btn">
